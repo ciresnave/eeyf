@@ -1,0 +1,112 @@
+# Pre-commit hooks for code quality
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+# To install: pip install pre-commit && pre-commit install
+# To run manually: pre-commit run --all-files
+
+default_language_version:
+    rust: 1.70.0
+
+repos:
+    # General file checks
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.5.0
+      hooks:
+          - id: trailing-whitespace
+            exclude: '\.md$'
+          - id: end-of-file-fixer
+          - id: check-yaml
+            args: ["--unsafe"] # Allow custom YAML tags
+          - id: check-toml
+          - id: check-json
+          - id: check-added-large-files
+            args: ["--maxkb=500"]
+          - id: check-merge-conflict
+          - id: check-case-conflict
+          - id: mixed-line-ending
+            args: ["--fix=lf"]
+
+    # Rust formatting with rustfmt
+    - repo: local
+      hooks:
+          - id: cargo-fmt
+            name: cargo fmt
+            entry: cargo fmt --all --
+            language: system
+            types: [rust]
+            pass_filenames: false
+            description: Run cargo fmt on all Rust files
+
+    # Rust linting with clippy
+    - repo: local
+      hooks:
+          - id: cargo-clippy
+            name: cargo clippy
+            entry: cargo clippy --all-targets --all-features -- -D warnings
+            language: system
+            types: [rust]
+            pass_filenames: false
+            description: Run cargo clippy with all warnings denied
+
+    # Rust tests
+    - repo: local
+      hooks:
+          - id: cargo-test
+            name: cargo test
+            entry: cargo test --all-features
+            language: system
+            types: [rust]
+            pass_filenames: false
+            description: Run all Rust tests
+            stages: [push] # Only run on push, not on commit
+
+    # Security audit
+    - repo: local
+      hooks:
+          - id: cargo-audit
+            name: cargo audit
+            entry: cargo audit --ignore RUSTSEC-0000-0000
+            language: system
+            pass_filenames: false
+            description: Security audit for known vulnerabilities
+            stages: [push] # Only run on push
+
+    # Check for common misspellings
+    - repo: https://github.com/codespell-project/codespell
+      rev: v2.2.6
+      hooks:
+          - id: codespell
+            args:
+                [
+                    "--skip=*.lock,target/*,*.json",
+                    "--ignore-words-list=crate,mut,nd,ser,te,wil"
+                ]
+
+    # Markdown linting
+    - repo: https://github.com/igorshubovych/markdownlint-cli
+      rev: v0.38.0
+      hooks:
+          - id: markdownlint
+            args: ["--fix"]
+            exclude: "temp_research/.*"
+
+    # YAML linting
+    - repo: https://github.com/adrienverge/yamllint
+      rev: v1.33.0
+      hooks:
+          - id: yamllint
+            args: ["-d", "{extends: default, rules: {line-length: {max: 120}}}"]
+
+# Configuration
+ci:
+    autofix_commit_msg: |
+        [pre-commit.ci] auto fixes from pre-commit hooks
+
+        for more information, see https://pre-commit.ci
+    autofix_prs: true
+    autoupdate_branch: ""
+    autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+    autoupdate_schedule: weekly
+    skip: [cargo-test, cargo-audit] # Skip time-consuming checks on CI
+    submodules: false

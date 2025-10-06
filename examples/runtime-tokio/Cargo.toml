@@ -1,0 +1,9 @@
+[package]
+    edition = "2021"
+    name    = "runtime-tokio-example"
+    version = "0.1.0"
+
+[dependencies]
+    eeyf  = { path = "../../", features = ["decimal"] }
+    time  = { version = "0.3", features = ["macros"] }
+    tokio = { version = "1.45", features = ["full"] }

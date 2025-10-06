@@ -1,0 +1,36 @@
+# Enterprise Preset Configuration
+#
+# This preset is designed for enterprise environments where IP protection is critical,
+# data freshness is important, and full observability is required. Rate limiting is
+# very conservative, and all monitoring features are enabled.
+
+description = "Enterprise defaults with maximum IP protection and observability"
+name        = "enterprise"
+
+# Rate limiting: Very conservative to protect IP (1800 requests/hour)
+rate_limit = 0.5
+
+# Circuit breaker: Moderate - balance between availability and protection
+circuit_breaker_threshold    = 8
+circuit_breaker_timeout_secs = 45
+circuit_breaker_window_secs  = 180 # 3 minutes
+
+# Retry policy: Moderate retries to avoid excessive load
+retry_attempts         = 4
+retry_initial_delay_ms = 1500
+retry_max_delay_ms     = 20000
+
+# Timeouts: Standard for most enterprise environments
+timeout_secs = 45
+
+# Caching: Large cache with moderate TTL for balance of freshness and efficiency
+cache_duration_secs = 300  # 5 minutes
+cache_size          = 3000
+
+# Connection pooling: Large pool for enterprise scale
+connection_pool_max = 100
+
+# Observability: Full monitoring and tracing
+enable_metrics  = true
+enable_tracing  = true
+verbose_logging = false

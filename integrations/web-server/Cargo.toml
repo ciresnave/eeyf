@@ -1,0 +1,63 @@
+[package]
+    edition = "2021"
+    name    = "eeyf-web-server-integration"
+    version = "0.1.0"
+
+[dependencies]
+    # EEYF with recommended features
+    eeyf = { path = "../../", features = [
+        "decimal",
+        "default",
+        "phase5",
+        "phase7",
+    ] }
+
+    # Web server abstraction (unified framework support)
+    web-server-abstraction = "1.0"
+
+    # Async runtime
+    tokio = { version = "1", features = ["full"] }
+
+    # Serialization
+    serde      = { version = "1", features = ["derive"] }
+    serde_json = "1"
+
+    # Error handling
+    anyhow    = "1"
+    thiserror = "1"
+
+    # Logging
+    tracing            = "0.1"
+    tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+    # Optional: Database support
+    sqlx = { version = "0.7", features = [
+        "postgres",
+        "runtime-tokio-native-tls",
+    ], optional = true }
+
+    # Optional: Monitoring
+    prometheus = { version = "0.13", optional = true }
+
+[dev-dependencies]
+    tokio-test = "0.4"
+
+[features]
+    database   = ["sqlx"]
+    default    = []
+    full       = ["database", "monitoring"]
+    monitoring = ["prometheus"]
+
+[[example]]
+    name = "basic_api"
+    path = "examples/basic_api.rs"
+
+[[example]]
+    name              = "database_storage"
+    path              = "examples/database_storage.rs"
+    required-features = ["database"]
+
+[[example]]
+    name              = "production_config"
+    path              = "examples/production_config.rs"
+    required-features = ["full"]

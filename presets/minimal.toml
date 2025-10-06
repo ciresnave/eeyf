@@ -1,0 +1,36 @@
+# Minimal Preset Configuration
+#
+# This preset provides the bare minimum configuration with enterprise features disabled.
+# Useful for testing, benchmarking, or scenarios where you want predictable behavior
+# without caching, retries, or circuit breaking.
+
+description = "Minimal configuration for testing and benchmarking"
+name        = "minimal"
+
+# Rate limiting: Effectively unlimited
+rate_limit = 1000.0
+
+# Circuit breaker: Effectively disabled
+circuit_breaker_threshold    = 1000
+circuit_breaker_timeout_secs = 1
+circuit_breaker_window_secs  = 1
+
+# Retry policy: No retries
+retry_attempts         = 0
+retry_initial_delay_ms = 0
+retry_max_delay_ms     = 0
+
+# Timeouts: Short for quick failure
+timeout_secs = 10
+
+# Caching: Disabled
+cache_duration_secs = 0
+cache_size          = 0
+
+# Connection pooling: Minimal
+connection_pool_max = 1
+
+# Observability: Disabled for minimal overhead
+enable_metrics  = false
+enable_tracing  = false
+verbose_logging = false

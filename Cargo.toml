@@ -1,0 +1,236 @@
+[package]
+    authors      = ["Eric Evans <ciresnave@gmail.com>"]
+    categories   = ["api-bindings"]
+    description  = "Eric Evans' Yahoo Finance API - A rate-limited, reliable Rust adapter for Yahoo Finance API"
+    edition      = "2024"
+    include      = ["LICENSE-*", "README.md", "src/**/*"]
+    keywords     = ["finance", "quote", "stock", "yahoo"]
+    license      = "MIT OR Apache-2.0"
+    name         = "eeyf"
+    readme       = "README.md"
+    repository   = "https://github.com/ciresnave/eeyf"
+    rust-version = "1.85.0"
+    version      = "0.1.0"
+
+[dependencies]
+    reqwest = { version = "0.12.19", default-features = false, features = [
+        "cookies",
+        "json",
+        "rustls-tls",
+    ] }
+
+    rust_decimal = { version = "1.36", optional = true }
+    serde = { version = "1.0.219", features = ["derive"] }
+    serde_json = "1.0.140"
+    serde_json_path_to_error = { version = "0.1.4", optional = true }
+    thiserror = "1.0"
+    time = { version = "0.3.41", features = ["macros"] }
+    tokio = { version = "1.45.1", features = [
+        "macros",
+        "rt-multi-thread",
+        "sync",
+        "time",
+    ] }
+    toml = "0.8"
+
+    # Additional dependencies for enhanced features
+    chrono = { version = "0.4", features = ["serde"] }
+    dashmap = "6.1"
+    futures-util = "0.3" # For batch operations
+    log = "0.4"
+    lru = "0.12"
+    metrics = { version = "0.24", optional = true }
+    metrics-exporter-prometheus = { version = "0.16", optional = true }
+    rand = "0.8"
+    sha2 = "0.10"
+    tracing = { version = "0.1", optional = true }
+    tracing-subscriber = { version = "0.3", optional = true, features = [
+        "env-filter",
+        "fmt",
+        "std",
+    ] }
+    url = "2.5"
+
+    # Phase 2: Observability & Configuration dependencies
+    opentelemetry         = { version = "0.21", optional = true }
+    opentelemetry-jaeger  = { version = "0.22", optional = true }
+    tracing-opentelemetry = { version = "0.22", optional = true }
+
+    # Phase 3: Performance & Reliability dependencies
+    arc-swap    = { version = "1.7", optional = true }
+    compress    = { version = "0.2", optional = true }
+    flate2      = { version = "1.0", optional = true }
+    futures     = { version = "0.3", optional = true }
+    governor    = { version = "0.6", optional = true }
+    parking_lot = { version = "0.12", optional = true }
+    uuid        = { version = "1.0", features = ["v4"] }
+    warp        = { version = "0.3", optional = true }
+
+    # Configuration management dependencies
+    config     = { version = "0.14", optional = true }
+    envy       = { version = "0.4", optional = true }
+    notify     = { version = "6.0", optional = true }
+    serde_yaml = { version = "0.9", optional = true }
+
+    # Phase 4: WebSocket streaming and Protocol Buffers
+    base64 = { version = "0.22", optional = true }
+    bytes = { version = "1.8", optional = true }
+    prost = { version = "0.12", optional = true }
+    tokio-tungstenite = { version = "0.21", optional = true, features = [
+        "native-tls",
+    ] }
+
+    # Phase 4: Market hours checking
+    chrono-tz = "0.8"
+
+    # Phase 5: Performance & Optimization dependencies
+    async-compression = { version = "0.4", features = [
+        "gzip",
+        "tokio",
+    ], optional = true }
+
+    # Phase 6: Developer Experience dependencies
+    clap = { version = "4.5", features = ["derive"], optional = true }
+
+    # Phase 7: Production Hardening dependencies
+    # (Most dependencies already available: uuid, chrono, tokio, serde, etc.)
+
+    # Phase 8: Runtime Flexibility dependencies
+    async-std = { version = "1.13", optional = true }
+    smol      = { version = "2.0", optional = true }
+
+[build-dependencies]
+    prost-build = "0.12"
+    serde       = { version = "1.0", features = ["derive"] }
+
+[dev-dependencies]
+    tokio      = { version = "1.45.1", features = ["macros", "rt-multi-thread"] }
+    tokio-test = "0.4.4"
+
+    # Dependencies for examples
+    chrono  = { version = "0.4", features = ["serde"] }
+    futures = "0.3"
+    uuid    = { version = "1.0", features = ["v4"] }
+
+    # Phase 3: Testing & Quality dependencies
+    criterion  = "0.5"  # Benchmarking
+    env_logger = "0.11" # Logging for tests/examples
+    proptest   = "1.4"  # Property-based testing
+    serde_yaml = "0.9"  # YAML support for integration tests
+    wiremock   = "0.6"  # Mock HTTP server
+
+[features]
+    debug   = ["serde_json_path_to_error"]
+    decimal = ["dep:rust_decimal"]
+    default = ["runtime-tokio"]
+    metrics = ["dep:metrics", "dep:metrics-exporter-prometheus"]
+    tracing = ["dep:tracing", "dep:tracing-subscriber"]
+    # Phase 2: Observability & Configuration features
+    health-server = ["dep:warp"]
+    jaeger = ["dep:opentelemetry-jaeger", "opentelemetry"]
+    observability = ["health-server", "metrics", "tracing"]
+    opentelemetry = [
+        "dep:opentelemetry",
+        "dep:tracing-opentelemetry",
+        "tracing",
+    ]
+
+    # Configuration management features
+    config-management = [
+        "dep:config",
+        "dep:envy",
+        "dep:notify",
+        "dep:serde_yaml",
+    ]
+    env-config = ["dep:envy"]
+    hot-reload = ["config-management", "dep:notify"]
+    yaml-config = ["dep:serde_yaml"]
+
+    # Combined Phase 2 feature
+    phase2 = ["config-management", "hot-reload", "observability"]
+
+    # Phase 3: Performance & Reliability features
+    performance-cache = [
+        "dep:arc-swap",
+        "dep:compress",
+        "dep:flate2",
+        "dep:futures",
+        "dep:parking_lot",
+    ]
+    performance-full = [
+        "performance-cache",
+        "performance-optimization",
+        "performance-pool",
+        "performance-rate-limit",
+    ]
+    performance-optimization = ["dep:arc-swap", "dep:parking_lot"]
+    performance-pool = ["dep:arc-swap", "dep:governor", "dep:parking_lot"]
+    performance-rate-limit = ["dep:arc-swap", "dep:governor", "dep:parking_lot"]
+
+    # Combined Phase 3 feature
+    phase3 = ["performance-full", "phase2"]
+
+    # Phase 4: Real-time streaming and enhanced APIs
+    websocket-streaming = [
+        "dep:base64",
+        "dep:bytes",
+        "dep:prost",
+        "dep:tokio-tungstenite",
+    ]
+
+    # Combined Phase 4 feature
+    phase4 = ["phase3", "websocket-streaming"]
+
+    # Phase 5: Performance & Optimization features
+    phase5-compression = ["dep:flate2"]
+    phase5-http2 = []
+    phase5-limits = []
+    phase5-performance = [
+        "phase5-compression",
+        "phase5-http2",
+        "phase5-limits",
+        "phase5-shutdown",
+    ]
+    phase5-shutdown = []
+
+    # Combined Phase 5 feature
+    phase5 = ["phase4", "phase5-performance"]
+
+    # Phase 6: Developer Experience features
+    cli-tool = ["dep:clap"]
+
+    # Combined Phase 6 feature
+    phase6 = ["cli-tool", "phase5"]
+
+    # Phase 7: Production Hardening features
+    audit-logging       = []
+    chaos-testing       = []
+    fallback-strategies = []
+    phase7-reliability  = ["chaos-testing", "fallback-strategies"]
+    phase7-security     = ["audit-logging", "security"]
+    security            = []
+
+    # Combined Phase 7 feature
+    phase7 = ["phase6", "phase7-reliability", "phase7-security"]
+
+    # Phase 8: Runtime Flexibility features
+    runtime-async-std = ["dep:async-std"]
+    runtime-smol      = ["dep:smol"]
+    runtime-tokio     = []                # Default runtime (tokio is always available)
+
+    # Combined Phase 8 feature
+    phase8 = ["phase7", "runtime-tokio"]
+
+    # Phase 9: Advanced Features (Weeks 17-18)
+    # Note: Advanced caching completed early in Phase 3
+    phase9           = ["phase8"]
+    phase9-analytics = ["phase9"]
+
+[[bench]]
+    harness = false
+    name    = "performance"
+
+[[bin]]
+    name              = "eeyf"
+    path              = "src/bin/eeyf.rs"
+    required-features = ["cli-tool"]

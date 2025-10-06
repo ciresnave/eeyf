@@ -1,0 +1,9 @@
+[package]
+    edition = "2024"
+    name    = "my-eeyf-app"
+    version = "0.1.0"
+
+[dependencies]
+    eeyf  = { path = "../../", features = ["decimal"] }
+    time  = "0.3"
+    tokio = { version = "1.45", features = ["full"] }

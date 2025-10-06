@@ -1,0 +1,36 @@
+# Development Preset Configuration
+#
+# This preset prioritizes fast feedback and debugging visibility for development workflows.
+# Rate limiting is permissive, circuit breaker is lenient, and caching is short-lived
+# to ensure fresh data during development.
+
+description = "Development defaults optimized for fast feedback and debugging"
+name        = "development"
+
+# Rate limiting: Permissive for rapid iteration
+rate_limit = 10.0
+
+# Circuit breaker: Lenient - allow some failures during development
+circuit_breaker_threshold    = 10
+circuit_breaker_timeout_secs = 30
+circuit_breaker_window_secs  = 60
+
+# Retry policy: Moderate retries
+retry_attempts         = 3
+retry_initial_delay_ms = 1000
+retry_max_delay_ms     = 10000
+
+# Timeouts: Standard
+timeout_secs = 30
+
+# Caching: Small cache, short TTL for fresh data
+cache_duration_secs = 30
+cache_size          = 500
+
+# Connection pooling: Standard pool
+connection_pool_max = 10
+
+# Observability: Verbose logging for debugging, basic metrics
+enable_metrics  = true
+enable_tracing  = false
+verbose_logging = true

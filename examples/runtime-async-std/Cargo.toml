@@ -1,0 +1,12 @@
+[package]
+    edition = "2021"
+    name    = "runtime-async-std-example"
+    version = "0.1.0"
+
+[dependencies]
+    async-std = { version = "1.13", features = ["attributes"] }
+    eeyf = { path = "../../", default-features = false, features = [
+        "decimal",
+        "runtime-async-std",
+    ] }
+    time = { version = "0.3", features = ["macros"] }

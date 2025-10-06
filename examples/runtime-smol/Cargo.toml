@@ -1,0 +1,12 @@
+[package]
+    edition = "2021"
+    name    = "runtime-smol-example"
+    version = "0.1.0"
+
+[dependencies]
+    eeyf = { path = "../../", default-features = false, features = [
+        "decimal",
+        "runtime-smol",
+    ] }
+    smol = "2.0"
+    time = { version = "0.3", features = ["macros"] }

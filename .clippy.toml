@@ -1,0 +1,59 @@
+# Clippy configuration for EEYF
+# Enforces high code quality standards with pedantic lints
+
+# Enable all pedantic lints by default
+# These catch potential issues and enforce best practices
+warn-pedantic = true
+
+# Cognitive complexity threshold - functions shouldn't be too complex
+cognitive-complexity-threshold = 30
+
+# Type complexity threshold - types shouldn't be too nested
+type-complexity-threshold = 500
+
+# Documentation requirements
+# Warn if public items lack documentation
+doc-markdown                  = true
+missing-docs-in-private-items = false
+
+# Performance lints
+# Catch common performance issues
+
+# Allowed/suppressed lints with justification
+# These are intentionally allowed for our use case
+
+# Allow: We use wildcard imports for prelude pattern
+enum-glob-use = "allow"
+
+# Allow: Module inception (module name same as file) is ok for our structure
+module-inception = "allow"
+
+# Allow: Single match is sometimes clearer than if-let
+single-match-else = "allow"
+
+# Allow: We prefer explicit match arms for documentation
+match-same-arms = "allow"
+
+# Allow: We use many single-char variable names in math/finance code
+many-single-char-names = "allow"
+
+# Allow: Struct field patterns are clear in our domain
+struct-excessive-bools = "allow"
+
+# Allow: Our API sometimes requires many arguments for configuration
+too-many-arguments = "allow"
+
+# Allow: Long functions are sometimes necessary for error handling
+too-many-lines = "allow"
+
+# Restrict certain lints that are too noisy
+
+# Warn only: These are good to review but not always applicable
+cast-possible-truncation = "warn"
+cast-possible-wrap       = "warn"
+cast-precision-loss      = "warn"
+cast-sign-loss           = "warn"
+
+# Deny: These are real bugs
+correctness = "deny"
+suspicious  = "deny"

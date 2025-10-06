@@ -1,0 +1,36 @@
+# Production Preset Configuration
+# 
+# This preset prioritizes safety, stability, and reliability for production deployments.
+# Rate limiting is conservative to prevent IP blocks, retries are extensive for reliability,
+# and caching is optimized for efficiency.
+
+description = "Safe, stable production defaults with comprehensive enterprise features"
+name        = "production"
+
+# Rate limiting: Conservative (1800 requests/hour)
+rate_limit = 0.5
+
+# Circuit breaker: Strict - fail fast on repeated errors
+circuit_breaker_threshold    = 5
+circuit_breaker_timeout_secs = 60
+circuit_breaker_window_secs  = 300 # 5 minutes
+
+# Retry policy: Extensive retries with exponential backoff
+retry_attempts         = 5
+retry_initial_delay_ms = 1000
+retry_max_delay_ms     = 30000
+
+# Timeouts: Generous for reliability
+timeout_secs = 60
+
+# Caching: Large cache, long TTL for efficiency
+cache_duration_secs = 900  # 15 minutes
+cache_size          = 2000
+
+# Connection pooling: Large pool for high throughput
+connection_pool_max = 50
+
+# Observability: Standard logging, full metrics and tracing
+enable_metrics  = true
+enable_tracing  = true
+verbose_logging = false

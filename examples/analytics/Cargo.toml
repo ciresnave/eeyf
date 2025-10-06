@@ -1,0 +1,8 @@
+[package]
+    edition = "2021"
+    name    = "analytics-example"
+    version = "0.1.0"
+
+[dependencies]
+    eeyf  = { path = "../..", features = ["decimal", "phase9"] }
+    tokio = { version = "1.45", features = ["full"] }

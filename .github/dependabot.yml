@@ -1,0 +1,108 @@
+# Dependabot configuration for automated dependency updates
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+    # Rust dependencies (Cargo.toml)
+    - package-ecosystem: "cargo"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+          timezone: "America/New_York"
+
+      # Limit open pull requests
+      open-pull-requests-limit: 5
+
+      # Group updates by dependency type
+      groups:
+          # Production dependencies
+          production:
+              applies-to: version-updates
+              patterns:
+                  - "tokio*"
+                  - "reqwest"
+                  - "serde*"
+                  - "chrono"
+                  - "url"
+                  - "parking_lot"
+                  - "governor"
+                  - "hyper*"
+              update-types:
+                  - "minor"
+                  - "patch"
+
+          # Development dependencies
+          development:
+              applies-to: version-updates
+              patterns:
+                  - "wiremock"
+                  - "proptest"
+                  - "criterion"
+                  - "mockito"
+                  - "tempfile"
+              update-types:
+                  - "minor"
+                  - "patch"
+
+      # Labels for PRs
+      labels:
+          - "dependencies"
+          - "rust"
+          - "automated"
+
+      # Ignore major version updates (review manually)
+      ignore:
+          # Pin to specific major versions for stability
+          - dependency-name: "*"
+            update-types: ["version-update:semver-major"]
+
+      # Commit message prefix
+      commit-message:
+          prefix: "chore(deps)"
+          prefix-development: "chore(dev-deps)"
+          include: "scope"
+
+      # Reviewers (optional - uncomment and add your GitHub usernames)
+      # reviewers:
+      #   - "your-username"
+
+      # Assignees (optional - uncomment and add your GitHub usernames)
+      # assignees:
+      #   - "your-username"
+
+      # Enable rebasing
+      rebase-strategy: "auto"
+
+      # Target branch
+      target-branch: "main"
+
+    # GitHub Actions workflow dependencies
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+          timezone: "America/New_York"
+
+      # Limit open pull requests
+      open-pull-requests-limit: 3
+
+      # Labels for PRs
+      labels:
+          - "dependencies"
+          - "github-actions"
+          - "automated"
+
+      # Commit message prefix
+      commit-message:
+          prefix: "chore(ci)"
+          include: "scope"
+
+      # Enable rebasing
+      rebase-strategy: "auto"
+
+      # Target branch
+      target-branch: "main"
