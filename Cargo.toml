@@ -113,7 +113,7 @@
     uuid    = { version = "1.0", features = ["v4"] }
 
     # Phase 3: Testing & Quality dependencies
-    criterion  = "0.5"  # Benchmarking
+    criterion  = "0.7"  # Benchmarking
     env_logger = "0.11" # Logging for tests/examples
     proptest   = "1.4"  # Property-based testing
     serde_yaml = "0.9"  # YAML support for integration tests
