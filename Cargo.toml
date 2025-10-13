@@ -31,7 +31,7 @@
         "sync",
         "time",
     ] }
-    toml = "0.8"
+    toml = "0.9"
 
     # Additional dependencies for enhanced features
     chrono = { version = "0.4", features = ["serde"] }
