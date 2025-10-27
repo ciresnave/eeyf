@@ -115,7 +115,7 @@
     # Phase 3: Testing & Quality dependencies
     criterion  = "0.5"  # Benchmarking
     env_logger = "0.11" # Logging for tests/examples
-    proptest   = "1.4"  # Property-based testing
+    proptest   = "1.9"  # Property-based testing
     serde_yaml = "0.9"  # YAML support for integration tests
     wiremock   = "0.6"  # Mock HTTP server
 
